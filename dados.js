@@ -1,8 +1,7 @@
 /* Conteúdo do quiz "Qual é o seu perfil ADM?" — pode editar à vontade.
    Regras para manter o jogo equilibrado (o jogo avisa no console se quebrar):
    - cada pergunta dos capítulos tem 1 opção de cada perfil: criativo, estrategista, conector, executor;
-   - cada pergunta da rodada relâmpago tem 2 opções de perfis diferentes, sem repetir o par.
-   VERSÃO PROVISÓRIA das perguntas: será substituída pela versão revisada. */
+   - cada pergunta da rodada relâmpago tem 2 opções de perfis diferentes, sem repetir o par. */
 window.DADOS = {
   perfis: {
     criativo: {
@@ -62,16 +61,16 @@ window.DADOS = {
           opcoes: {
             criativo: 'Imagino um jeito diferente de apresentar o tema',
             estrategista: 'Entendo o que foi pedido e faço um plano',
-            conector: 'Reúno o grupo para dividir quem faz o quê',
+            conector: 'Crio o grupo no WhatsApp e chamo todo mundo',
             executor: 'Separo o material e já começo a pesquisa',
           },
         },
         {
           etiqueta: 'Gincana',
-          texto: 'Na gincana da escola, sua equipe recebe uma lista de tarefas. Qual é a sua?',
+          texto: 'Na gincana da escola, sua equipe recebe a lista de tarefas. Qual é o seu papel?',
           opcoes: {
             criativo: 'Escrevo a paródia que a equipe vai cantar',
-            estrategista: 'Calculo o que vale mais pontos',
+            estrategista: 'Vejo quais tarefas valem mais pontos',
             conector: 'Divido as tarefas pelo que cada um faz bem',
             executor: 'Saio correndo atrás do que a lista pede',
           },
@@ -88,10 +87,10 @@ window.DADOS = {
         },
         {
           etiqueta: 'Grupo da turma',
-          texto: 'Amanhã tem prova e ninguém no grupo da turma sabe o que cai. Qual é a sua?',
+          texto: 'Amanhã tem prova e ninguém no grupo da turma sabe o que vai cair. O que você faz?',
           opcoes: {
-            criativo: 'Invento um macete para todo mundo decorar',
-            estrategista: 'Vejo o que mais caiu nas outras provas',
+            criativo: 'Bolo um macete para todo mundo decorar',
+            estrategista: 'Olho as provas antigas para ver o que mais cai',
             conector: 'Puxo uma chamada para a turma estudar junto',
             executor: 'Mando as fotos do meu caderno, tudo organizado',
           },
@@ -100,8 +99,8 @@ window.DADOS = {
           etiqueta: 'Imprevisto',
           texto: 'No dia da apresentação, uma pessoa do grupo faltou. O que você faz?',
           opcoes: {
-            criativo: 'Improviso uma solução que ninguém esperava',
-            estrategista: 'Refaço o plano para garantir a nota',
+            criativo: 'Troco a parte dela por um quiz com a turma',
+            estrategista: 'Peço para ir por último e reorganizo a ordem',
             conector: 'Acalmo o grupo e dividimos a parte dela',
             executor: 'Assumo a parte dela e estudo na hora',
           },
@@ -109,25 +108,25 @@ window.DADOS = {
       ],
     },
     {
-      titulo: 'Ideias e dinheiro',
-      intro: 'Agora é com vendas, canal na internet e o caixa da turma.',
+      titulo: 'Fora da sala',
+      intro: 'Agora tem venda da turma, vídeos na internet e o rolê do fim de semana.',
       perguntas: [
         {
           etiqueta: 'Doces da formatura',
           texto: 'Sua turma vai vender doces para ajudar a pagar a formatura. Por onde você começa?',
           opcoes: {
-            criativo: 'Invento um doce que ninguém da escola vende',
+            criativo: 'Penso num doce que vire moda na escola',
             estrategista: 'Calculo quanto custa cada doce e quanto cobrar',
             conector: 'Vejo quem sabe cozinhar e quem gosta de vender',
             executor: 'Separo os ingredientes e começo a fazer',
           },
         },
         {
-          etiqueta: 'Canal novo',
-          texto: 'Você quer criar um canal sobre um assunto que adora. Qual é o primeiro passo?',
+          etiqueta: 'Postar vídeos',
+          texto: 'Você quer começar a postar vídeos sobre algo que adora. Qual é o primeiro passo?',
           opcoes: {
-            criativo: 'Invento um tipo de vídeo que ninguém fez',
-            estrategista: 'Pesquiso canais parecidos e vejo o que falta',
+            criativo: 'Crio um estilo de vídeo com a minha cara',
+            estrategista: 'Pesquiso perfis parecidos e vejo o que falta',
             conector: 'Pergunto aos amigos o que eles querem ver',
             executor: 'Gravo o primeiro vídeo hoje mesmo',
           },
@@ -144,22 +143,22 @@ window.DADOS = {
         },
         {
           etiqueta: 'Sem bateria',
-          texto: 'Na venda da turma, o celular que recebia os pagamentos descarregou. Como você resolve?',
+          texto: 'Na venda da turma, o celular que recebia o Pix descarregou. Como você resolve?',
           opcoes: {
-            criativo: 'Crio uma promoção para quem pagar em dinheiro',
-            estrategista: 'Anoto cada venda para a conta bater no final',
-            conector: 'Converso com cada cliente e combino como pagar',
+            criativo: 'Faço uma promoção para quem pagar em dinheiro',
+            estrategista: 'Anoto quem pagou e quem vai pagar depois',
+            conector: 'Converso com cada pessoa e combino como pagar',
             executor: 'Corro atrás de um carregador e sigo vendendo',
           },
         },
         {
-          etiqueta: 'Caixa da turma',
-          texto: 'Depois das vendas, sobrou um dinheiro no caixa da turma. O que você sugere?',
+          etiqueta: 'Rolê de sábado',
+          texto: 'Seus amigos querem sair no sábado e ninguém decide para onde. O que você faz?',
           opcoes: {
-            criativo: 'Criar um produto novo para vender',
-            estrategista: 'Guardar uma reserva para imprevistos',
-            conector: 'Fazer uma votação para a turma decidir',
-            executor: 'Repor o estoque e marcar a próxima venda',
+            criativo: 'Sugiro um programa diferente do de sempre',
+            estrategista: 'Comparo os preços e o horário do ônibus',
+            conector: 'Faço uma enquete no grupo e todo mundo vota',
+            executor: 'Escolho o lugar e já mando a localização',
           },
         },
       ],
@@ -175,19 +174,19 @@ window.DADOS = {
       { texto: 'Você prefere...', opcoes: { estrategista: 'Ter tudo planejado', criativo: 'Criar algo do zero' } },
       { texto: 'Numa equipe nova, você...', opcoes: { conector: 'Faz todo mundo se enturmar', criativo: 'Inventa um nome para a equipe' } },
       { texto: 'No tempo livre, você prefere...', opcoes: { criativo: 'Desenhar ou editar vídeos', executor: 'Consertar ou montar coisas' } },
-      { texto: 'Na hora de decidir, você...', opcoes: { estrategista: 'Compara as opções', conector: 'Ouve a opinião da turma' } },
-      { texto: 'Para montar algo novo, você...', opcoes: { executor: 'Vai testando na prática', estrategista: 'Lê o manual primeiro' } },
+      { texto: 'Na hora de pedir lanche com os amigos, você...', opcoes: { estrategista: 'Compara os preços', conector: 'Pergunta o que cada um quer' } },
+      { texto: 'Para montar um móvel novo, você...', opcoes: { executor: 'Vai testando na prática', estrategista: 'Lê o manual primeiro' } },
       { texto: 'Na festa da turma, você...', opcoes: { executor: 'Monta a decoração', conector: 'Anima a galera' } },
     ],
   },
 
   desempate: {
-    texto: 'Nas férias, você quer começar algo novo. Como você decide o quê?',
+    texto: 'Qual elogio você mais escuta dos amigos?',
     opcoes: {
-      criativo: 'Vou atrás da ideia mais diferente que eu tiver',
-      estrategista: 'Listo as opções e comparo prós e contras',
-      conector: 'Chamo amigos para escolhermos algo juntos',
-      executor: 'Escolho uma coisa e começo amanhã mesmo',
+      criativo: '“Você tem cada ideia”',
+      estrategista: '“Você pensa em tudo”',
+      conector: '“Você é muito parceria”',
+      executor: '“Com você as coisas acontecem”',
     },
   },
 
