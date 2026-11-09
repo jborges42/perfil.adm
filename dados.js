@@ -1,0 +1,233 @@
+/* Conteúdo do quiz "Qual é o seu perfil ADM?" — pode editar à vontade.
+   Regras para manter o jogo equilibrado (o jogo avisa no console se quebrar):
+   - cada pergunta dos capítulos tem 1 opção de cada perfil: criativo, estrategista, conector, executor;
+   - cada pergunta da rodada relâmpago tem 2 opções de perfis diferentes, sem repetir o par.
+   VERSÃO PROVISÓRIA das perguntas: será substituída pela versão revisada. */
+window.DADOS = {
+  perfis: {
+    criativo: {
+      nome: 'O Criativo',
+      frase: 'Tive uma ideia.',
+      descricao: 'Você vive tendo ideias, se comunica bem e repara no que está em alta. Se a apresentação da turma ficou sem graça, você já pensa em outro jeito de fazer.',
+      pontosFortes: ['Ideias novas', 'Comunicação', 'Faro para tendências'],
+      combinaCom: ['Marketing', 'Empreendedorismo'],
+      noTecnico: 'Você aprende como funciona o marketing e o que é preciso para abrir o próprio negócio.',
+      profissoes: ['Analista de marketing', 'Social media', 'Empreendedor(a)'],
+      ladoB: 'De vez em quando, a ideia diferente vem de você.',
+      dica: 'Anote toda ideia que aparecer, até as mais estranhas. Depois, escolha uma e mostre para alguém.',
+    },
+    estrategista: {
+      nome: 'O Estrategista',
+      frase: 'Qual é o plano B?',
+      descricao: 'Você gosta de analisar a situação, planejar e pensar no que cada decisão pode causar. Antes de gastar a mesada, você já fez as contas do mês.',
+      pontosFortes: ['Planejamento', 'Análise', 'Cabeça fria'],
+      combinaCom: ['Administração Geral', 'Finanças'],
+      noTecnico: 'Você aprende como uma empresa toma decisões e como cuidar do dinheiro dela.',
+      profissoes: ['Administrador(a)', 'Analista de finanças', 'Gerente de banco'],
+      ladoB: 'Antes de decidir, você também pensa no que pode acontecer.',
+      dica: 'Jogue xadrez ou outro jogo de estratégia. Isso ajuda a pensar no que vem depois de cada escolha.',
+    },
+    conector: {
+      nome: 'O Conector',
+      frase: 'Ninguém fica de fora.',
+      descricao: 'Você gosta de colaborar e sabe dividir as tarefas do trabalho em grupo. Quando a turma não se entende, você conversa com cada pessoa até todo mundo chegar a um acordo.',
+      pontosFortes: ['Trabalho em equipe', 'Saber ouvir', 'Resolver conflitos'],
+      combinaCom: ['Gestão de Pessoas', 'Liderança'],
+      noTecnico: 'Você aprende a liderar equipes e a cuidar das pessoas que fazem uma empresa funcionar.',
+      profissoes: ['Analista de RH', 'Recrutador(a)', 'Líder de equipe'],
+      ladoB: 'Você também cuida para ninguém ficar de fora.',
+      dica: 'Puxe conversa com alguém da turma com quem você quase não fala.',
+    },
+    executor: {
+      nome: 'O Executor',
+      frase: 'Deixa comigo.',
+      descricao: 'Você gosta de colocar a mão na massa e de ver as coisas saindo do papel. Na festa junina da escola, é você quem monta a barraca e deixa tudo funcionando.',
+      pontosFortes: ['Iniciativa', 'Organização', 'Senso prático'],
+      combinaCom: ['Logística', 'Gestão da Produção'],
+      noTecnico: 'Você aprende como um produto é feito e como ele chega até quem comprou.',
+      profissoes: ['Analista de logística', 'Supervisor(a) de produção', 'Gerente de operações'],
+      ladoB: 'Na hora de fazer, você também não fica só olhando.',
+      dica: 'Monte uma lista de tarefas da semana e risque cada uma quando terminar. Riscar é a melhor parte.',
+    },
+  },
+
+  capitulos: [
+    {
+      titulo: 'Na escola',
+      intro: 'Trabalho em grupo, gincana, interclasse. Você já viveu tudo isso.',
+      perguntas: [
+        {
+          etiqueta: 'Trabalho em grupo',
+          texto: 'A professora passou um trabalho em grupo para daqui a duas semanas. Por onde você começa?',
+          opcoes: {
+            criativo: 'Imagino um jeito diferente de apresentar o tema',
+            estrategista: 'Entendo o que foi pedido e faço um plano',
+            conector: 'Reúno o grupo para dividir quem faz o quê',
+            executor: 'Separo o material e já começo a pesquisa',
+          },
+        },
+        {
+          etiqueta: 'Gincana',
+          texto: 'Na gincana da escola, sua equipe recebe uma lista de tarefas. Qual é a sua?',
+          opcoes: {
+            criativo: 'Escrevo a paródia que a equipe vai cantar',
+            estrategista: 'Calculo o que vale mais pontos',
+            conector: 'Divido as tarefas pelo que cada um faz bem',
+            executor: 'Saio correndo atrás do que a lista pede',
+          },
+        },
+        {
+          etiqueta: 'Interclasse',
+          texto: 'Vai ter interclasse e sua turma quer muito ganhar. Como você ajuda o time?',
+          opcoes: {
+            criativo: 'Crio o grito de guerra da torcida',
+            estrategista: 'Estudo o time adversário e penso na tática',
+            conector: 'Animo o time quando a gente está perdendo',
+            executor: 'Marco os treinos e levo bola e coletes',
+          },
+        },
+        {
+          etiqueta: 'Grupo da turma',
+          texto: 'Amanhã tem prova e ninguém no grupo da turma sabe o que cai. Qual é a sua?',
+          opcoes: {
+            criativo: 'Invento um macete para todo mundo decorar',
+            estrategista: 'Vejo o que mais caiu nas outras provas',
+            conector: 'Puxo uma chamada para a turma estudar junto',
+            executor: 'Mando as fotos do meu caderno, tudo organizado',
+          },
+        },
+        {
+          etiqueta: 'Imprevisto',
+          texto: 'No dia da apresentação, uma pessoa do grupo faltou. O que você faz?',
+          opcoes: {
+            criativo: 'Improviso uma solução que ninguém esperava',
+            estrategista: 'Refaço o plano para garantir a nota',
+            conector: 'Acalmo o grupo e dividimos a parte dela',
+            executor: 'Assumo a parte dela e estudo na hora',
+          },
+        },
+      ],
+    },
+    {
+      titulo: 'Ideias e dinheiro',
+      intro: 'Agora é com vendas, canal na internet e o caixa da turma.',
+      perguntas: [
+        {
+          etiqueta: 'Doces da formatura',
+          texto: 'Sua turma vai vender doces para ajudar a pagar a formatura. Por onde você começa?',
+          opcoes: {
+            criativo: 'Invento um doce que ninguém da escola vende',
+            estrategista: 'Calculo quanto custa cada doce e quanto cobrar',
+            conector: 'Vejo quem sabe cozinhar e quem gosta de vender',
+            executor: 'Separo os ingredientes e começo a fazer',
+          },
+        },
+        {
+          etiqueta: 'Canal novo',
+          texto: 'Você quer criar um canal sobre um assunto que adora. Qual é o primeiro passo?',
+          opcoes: {
+            criativo: 'Invento um tipo de vídeo que ninguém fez',
+            estrategista: 'Pesquiso canais parecidos e vejo o que falta',
+            conector: 'Pergunto aos amigos o que eles querem ver',
+            executor: 'Gravo o primeiro vídeo hoje mesmo',
+          },
+        },
+        {
+          etiqueta: 'Campeonato de games',
+          texto: 'Vai ter campeonato de games na escola, e sua turma organiza. Do que você cuida?',
+          opcoes: {
+            criativo: 'Do nome, da arte e da divulgação',
+            estrategista: 'Das regras, para evitar confusão depois',
+            conector: 'De chamar a escola toda, até quem nunca jogou',
+            executor: 'Da tabela e do espaço dos jogos',
+          },
+        },
+        {
+          etiqueta: 'Sem bateria',
+          texto: 'Na venda da turma, o celular que recebia os pagamentos descarregou. Como você resolve?',
+          opcoes: {
+            criativo: 'Crio uma promoção para quem pagar em dinheiro',
+            estrategista: 'Anoto cada venda para a conta bater no final',
+            conector: 'Converso com cada cliente e combino como pagar',
+            executor: 'Corro atrás de um carregador e sigo vendendo',
+          },
+        },
+        {
+          etiqueta: 'Caixa da turma',
+          texto: 'Depois das vendas, sobrou um dinheiro no caixa da turma. O que você sugere?',
+          opcoes: {
+            criativo: 'Criar um produto novo para vender',
+            estrategista: 'Guardar uma reserva para imprevistos',
+            conector: 'Fazer uma votação para a turma decidir',
+            executor: 'Repor o estoque e marcar a próxima venda',
+          },
+        },
+      ],
+    },
+  ],
+
+  relampago: {
+    depoisDoCapitulo: 1,
+    rotulo: 'Rodada relâmpago',
+    titulo: 'Isto ou aquilo?',
+    intro: 'Seis perguntas rápidas. Responda no impulso, sem pensar muito.',
+    perguntas: [
+      { texto: 'Você prefere...', opcoes: { estrategista: 'Ter tudo planejado', criativo: 'Criar algo do zero' } },
+      { texto: 'Numa equipe nova, você...', opcoes: { conector: 'Faz todo mundo se enturmar', criativo: 'Inventa um nome para a equipe' } },
+      { texto: 'No tempo livre, você prefere...', opcoes: { criativo: 'Desenhar ou editar vídeos', executor: 'Consertar ou montar coisas' } },
+      { texto: 'Na hora de decidir, você...', opcoes: { estrategista: 'Compara as opções', conector: 'Ouve a opinião da turma' } },
+      { texto: 'Para montar algo novo, você...', opcoes: { executor: 'Vai testando na prática', estrategista: 'Lê o manual primeiro' } },
+      { texto: 'Na festa da turma, você...', opcoes: { executor: 'Monta a decoração', conector: 'Anima a galera' } },
+    ],
+  },
+
+  desempate: {
+    texto: 'Nas férias, você quer começar algo novo. Como você decide o quê?',
+    opcoes: {
+      criativo: 'Vou atrás da ideia mais diferente que eu tiver',
+      estrategista: 'Listo as opções e comparo prós e contras',
+      conector: 'Chamo amigos para escolhermos algo juntos',
+      executor: 'Escolho uma coisa e começo amanhã mesmo',
+    },
+  },
+
+  textos: {
+    start_kicker: 'ADM Experience · Atração 4',
+    start_title: 'Qual é o seu perfil ADM?',
+    start_subtitle: 'São 16 perguntas rápidas, uns 3 minutos. Não tem resposta errada: escolha o que você faria de verdade.',
+    start_button: 'Começar',
+    nome_title: 'Qual nome vai no seu cartão?',
+    nome_subtitle: 'Pode ser nome ou apelido. Se preferir, deixe em branco.',
+    name_label: 'Nome ou apelido',
+    name_placeholder: 'Digite aqui, se quiser',
+    begin_button: 'Ir para as perguntas',
+    capitulo: 'Capítulo',
+    continuar: 'Continuar',
+    tie_title: 'Deu empate',
+    tie_intro: 'Mais de um perfil ficou com a mesma pontuação. Uma última pergunta resolve.',
+    loading_title: 'Calculando seu perfil',
+    loading_phrases: ['Somando as respostas…', 'O Estrategista está conferindo as contas…', 'Ajustando a coroa…'],
+    result_kicker: 'Seu perfil ADM',
+    mix_title: 'Seu mix de perfis',
+    pontos_fortes_title: 'Pontos fortes',
+    combina_title: 'Áreas que combinam com você',
+    profissoes_title: 'Profissões para conhecer',
+    no_tecnico_title: 'No curso técnico',
+    lado_b_title: 'Seu lado B',
+    dica_title: 'Dica para treinar',
+    print_button: 'Imprimir cartão',
+    restart_button: 'Próxima pessoa',
+    back_button: 'Voltar',
+    som_label: 'Ligar ou desligar o som',
+    progresso_label: 'Progresso do quiz',
+    de: 'de',
+    ou: 'ou',
+    cartao_de: 'Cartão de',
+    cartao_sem_nome: 'ADM Experience',
+    perfis_label: 'Os quatro perfis',
+    realizacao: 'Realização',
+    credits: 'Realização: Técnico em Administração · EEB Eurico Pinz · Turma 1º01',
+    cta: 'Seu jeito de pensar também tem espaço na Administração. Descubra tudo o que você pode aprender no Técnico em Administração da EEB Eurico Pinz!',
+    aviso: 'Este quiz é uma brincadeira de autodescoberta, não um teste profissional. Dá para se identificar com vários perfis ao mesmo tempo.',
+  },
+};
