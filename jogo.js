@@ -1,9 +1,10 @@
-/* Qual é o seu perfil ADM? — ADM Experience · Técnico em Administração · EEB Eurico Pinz
+/* Qual é o seu perfil ADM? — jogo de cartas do ADM Experience · Técnico em Administração · EEB Eurico Pinz
    Lógica do jogo. Os textos e perguntas ficam em dados.js. */
 (function () {
   'use strict';
 
   const PERFIS = ['criativo', 'estrategista', 'conector', 'executor'];
+  const SIGLA = { criativo: 'CRI', estrategista: 'EST', conector: 'CON', executor: 'EXE' };
 
   // ---------- regras puras (verificadas por teste.js) ----------
   const Quiz = {
@@ -43,7 +44,7 @@
       return a;
     },
 
-    // sequência de telas: capítulos, rodada relâmpago depois do capítulo indicado
+    // sequência de telas: fases, rodada relâmpago depois da fase indicada
     roteiro(D, rnd = Math.random) {
       const passos = [];
       let n = 0;
@@ -66,7 +67,7 @@
       const pares = new Set();
       D.capitulos.forEach((cap, k) => cap.perguntas.forEach((q, i) => {
         const ps = Object.keys(q.opcoes).sort().join();
-        if (ps !== 'conector,criativo,estrategista,executor') erros.push(`Capítulo ${k + 1}, pergunta ${i + 1}: precisa de 1 opção de cada perfil`);
+        if (ps !== 'conector,criativo,estrategista,executor') erros.push(`Fase ${k + 1}, pergunta ${i + 1}: precisa de 1 opção de cada perfil`);
         Object.keys(q.opcoes).forEach(p => { if (p in vezes) vezes[p]++; });
       }));
       D.relampago.perguntas.forEach((q, i) => {
@@ -89,10 +90,34 @@
   // ---------- interface ----------
   const D = window.DADOS;
   const T = D.textos;
-  const $ = s => document.querySelector(s);
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const reduzido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const tempo = ms => (reduzido ? Math.min(ms, 150) : ms);
   const problemas = Quiz.validar(D);
   if (problemas.length) console.warn('[dados.js]', problemas);
+
+  // arte dos perfis; enquanto avatar/emblema não existir, usa o ícone do perfil
+  const RESERVA = {
+    criativo: 'assets/icones/perfis/criativo-megaphone-fill.svg',
+    estrategista: 'assets/icones/perfis/estrategista-binoculars-fill.svg',
+    conector: 'assets/icones/perfis/conector-chats-circle-fill.svg',
+    executor: 'assets/icones/perfis/executor-hammer-fill.svg',
+  };
+  function arte(img, perfil, pasta) {
+    img.onerror = () => { img.onerror = null; img.src = RESERVA[perfil]; };
+    img.src = `assets/${pasta}/${perfil}.svg`;
+  }
+
+  function criarCarta(perfil) {
+    const el = $('#tpl-carta').content.firstElementChild.cloneNode(true);
+    el.dataset.perfil = perfil;
+    arte($('.cp-avatar', el), perfil, 'avatares');
+    arte($('.cp-emblema', el), perfil, 'emblemas');
+    $('.cp-perfil', el).textContent = D.perfis[perfil].nome;
+    $('.cp-sigla', el).textContent = SIGLA[perfil];
+    return el;
+  }
 
   let passos = [];
   let idx = 0;
@@ -100,19 +125,34 @@
   let nome = '';
   let travado = false;
   let timer = 0;
+  let giro = 0;
 
   document.querySelectorAll('[data-t]').forEach(el => { el.textContent = T[el.dataset.t]; });
   document.querySelectorAll('[data-t-label]').forEach(el => { el.setAttribute('aria-label', T[el.dataset.tLabel]); });
   $('#campo-nome').placeholder = T.name_placeholder;
-  $('.inicio-perfis').replaceChildren(...PERFIS.map(p => {
-    const li = document.createElement('li');
-    li.dataset.perfil = p;
-    li.textContent = D.perfis[p].nome;
-    return li;
+  $('.previa-nome').textContent = T.previa_vazio;
+
+  // tela inicial: as 4 cartas de perfil se revezando na mesa
+  const posLeque = [0, 1, 2, 3];
+  $('.leque').replaceChildren(...PERFIS.map((p, k) => {
+    const el = criarCarta(p);
+    el.classList.add('mini-carta', `pos-${k}`);
+    el.style.setProperty('--k', k);
+    return el;
   }));
+  function girarLeque() {
+    const prox = { 0: 1, 1: 3, 3: 2, 2: 0 };
+    $$('.leque .carta-perfil').forEach((el, k) => {
+      el.classList.remove(`pos-${posLeque[k]}`);
+      posLeque[k] = prox[posLeque[k]];
+      el.classList.add(`pos-${posLeque[k]}`);
+    });
+  }
 
   function mostrar(id) {
     clearTimeout(timer);
+    clearInterval(giro);
+    if (id === 'inicio' && !reduzido) giro = setInterval(girarLeque, 3400);
     document.querySelectorAll('.tela').forEach(t => t.classList.toggle('ativa', t.id === id));
     document.body.dataset.tela = id;
     window.scrollTo(0, 0);
@@ -125,20 +165,20 @@
     el.classList.add('anima');
   }
 
-  function progresso(n) {
+  function atualizarMonte() {
     const total = passos.filter(p => p.n).length;
-    const bar = $('.progresso');
-    bar.setAttribute('aria-valuenow', n);
-    bar.setAttribute('aria-valuemax', total);
-    bar.style.setProperty('--feito', `${((n - 1) / total) * 100}%`);
-    $('.progresso-texto').textContent = `${n} ${T.de} ${total}`;
-    $('#btn-voltar').hidden = !passos.slice(0, idx).some(p => p.n);
+    const feitas = Math.min(total, respostas.filter((r, i) => r && passos[i] && passos[i].n).length);
+    const monte = $('.monte');
+    monte.setAttribute('aria-valuenow', feitas);
+    monte.setAttribute('aria-valuemax', total);
+    $('.monte-n').textContent = feitas;
+    $('.monte-total').textContent = `/${total}`;
+    $('#btn-voltar').hidden = !passos.slice(0, idx).some(p => p.ops);
   }
 
   function renderPasso() {
+    atualizarMonte();
     const p = passos[idx];
-    const proxima = p.n || (passos.slice(idx).find(x => x.n) || {}).n || 1;
-    progresso(proxima);
     if (p.tipo === 'intro') return renderIntro(p);
     renderPergunta(p);
   }
@@ -146,12 +186,12 @@
   function renderIntro(p) {
     const sec = $('#intro');
     sec.classList.toggle('relampago', !!p.relampago);
-    sec.querySelector('.intro-rotulo').textContent = p.rotulo;
-    sec.querySelector('.intro-titulo').textContent = p.titulo;
-    sec.querySelector('.intro-texto').textContent = p.texto;
+    $('.intro-rotulo', sec).textContent = p.rotulo;
+    $('.intro-titulo', sec).textContent = p.titulo;
+    $('.intro-texto', sec).textContent = p.texto;
     reanimar(sec);
     mostrar('intro');
-    sec.querySelector('.intro-seguir').focus({ preventScroll: true });
+    $('.intro-seguir', sec).focus({ preventScroll: true });
     const ms = p.relampago ? 4500 : 3500;
     sec.style.setProperty('--tempo', `${ms}ms`);
     timer = setTimeout(proximo, ms);
@@ -160,51 +200,70 @@
   function renderPergunta(p) {
     const vs = p.tipo === 'vs';
     const sec = vs ? $('#vs') : $('#pergunta');
-    sec.querySelector('.etiqueta').textContent = p.tipo === 'desempate' ? T.tie_title : vs ? D.relampago.rotulo : p.q.etiqueta;
-    sec.querySelector('.enunciado').textContent = p.q.texto;
-    const lista = sec.querySelector('.opcoes');
-    const botoes = p.ops.map(([perfil, texto], k) => opcao(perfil, texto, 'ABCD'[k], k));
+    $('.etiqueta', sec).textContent = p.tipo === 'desempate' ? T.tie_title : vs ? D.relampago.rotulo : p.q.etiqueta;
+    $('.enunciado', sec).textContent = p.q.texto;
+    const aviso = $('.intro-desempate', sec);
+    if (aviso) aviso.hidden = p.tipo !== 'desempate';
+    const mesa = vs ? $('.duelo', sec) : $('.mao', sec);
+    const cartas = p.ops.map(([perfil, texto], k) => cartaOpcao(perfil, texto, 'ABCD'[k], k));
     if (vs) {
       const ou = document.createElement('span');
       ou.className = 'ou';
       ou.setAttribute('aria-hidden', 'true');
       ou.textContent = T.ou;
-      botoes.splice(1, 0, ou);
+      cartas.splice(1, 0, ou);
     }
-    lista.replaceChildren(...botoes);
-    lista.classList.remove('respondida');
-    const avisoEmpate = sec.querySelector('.intro-desempate');
-    if (avisoEmpate) avisoEmpate.hidden = p.tipo !== 'desempate';
+    mesa.replaceChildren(...cartas);
+    mesa.classList.remove('respondida');
     reanimar(sec);
     mostrar(sec.id);
-    sec.querySelector('.enunciado').focus({ preventScroll: true });
+    $('.enunciado', sec).focus({ preventScroll: true });
   }
 
-  function opcao(perfil, texto, letra, k) {
+  function canto(classe, letra) {
+    const s = document.createElement('span');
+    s.className = `canto ${classe}`;
+    s.setAttribute('aria-hidden', 'true');
+    s.textContent = letra;
+    const naipe = document.createElement('img');
+    naipe.src = 'assets/marca/curso-simbolo.webp';
+    naipe.alt = '';
+    s.append(naipe);
+    return s;
+  }
+
+  function cartaOpcao(perfil, texto, letra, k) {
     const b = document.createElement('button');
     b.type = 'button';
-    b.className = 'opcao';
+    b.className = 'carta opcao';
     b.style.setProperty('--i', k);
-    const l = document.createElement('span');
-    l.className = 'letra';
-    l.setAttribute('aria-hidden', 'true');
-    l.textContent = letra;
     const t = document.createElement('span');
-    t.className = 'texto';
+    t.className = 'opcao-texto';
     t.textContent = texto;
-    b.append(l, t);
+    b.append(canto('canto-a', letra), t, canto('canto-b', letra));
     b.addEventListener('click', () => escolher(b, perfil));
     return b;
   }
 
-  function escolher(botao, perfil) {
+  function escolher(carta, perfil) {
     if (travado) return;
     travado = true;
     respostas[idx] = perfil;
-    botao.classList.add('escolhida');
-    botao.parentElement.classList.add('respondida');
-    som('clique');
-    setTimeout(() => { travado = false; proximo(); }, reduzido ? 160 : 520);
+    const alvo = $('.monte-pilha').getBoundingClientRect();
+    const r = carta.getBoundingClientRect();
+    carta.style.setProperty('--tx', `${alvo.left + alvo.width / 2 - (r.left + r.width / 2)}px`);
+    carta.style.setProperty('--ty', `${alvo.top + alvo.height / 2 - (r.top + r.height / 2)}px`);
+    carta.classList.add('jogada');
+    carta.parentElement.classList.add('respondida');
+    som('carta');
+    setTimeout(() => {
+      atualizarMonte();
+      const monte = $('.monte');
+      monte.classList.remove('bump');
+      void monte.offsetWidth;
+      monte.classList.add('bump');
+    }, tempo(560));
+    setTimeout(() => { travado = false; proximo(); }, tempo(780));
   }
 
   function proximo() {
@@ -217,7 +276,7 @@
     if (travado) return;
     if (passos[idx] && passos[idx].tipo === 'desempate') passos.pop();
     let n = idx - 1;
-    while (n >= 0 && !passos[n].n) n--;
+    while (n >= 0 && !passos[n].ops) n--;
     if (n < 0) return;
     respostas.length = n;
     idx = n;
@@ -230,31 +289,49 @@
     if (empate.length > 1) {
       passos.push({
         tipo: 'desempate',
-        n: passos[idx].n,
         q: D.desempate,
         ops: Quiz.embaralhar(Object.entries(D.desempate.opcoes).filter(([p]) => empate.includes(p))),
       });
       idx++;
       return renderPasso();
     }
-    calcular(c);
+    abrirPacote(c);
   }
 
-  function calcular(c) {
-    const sec = $('#calculando');
-    const frase = sec.querySelector('.calculando-frase');
-    const frases = T.loading_phrases;
-    let k = 0;
-    frase.textContent = frases[0];
+  // ---------- pacote: embaralha, abre e revela a carta ----------
+  function abrirPacote(c) {
+    const sec = $('#pacote');
+    const pacote = $('.pacote', sec);
+    const titulo = $('.pacote-titulo', sec);
+    const dica = $('.pacote-dica', sec);
+    let aberto = false;
+    pacote.classList.remove('aberto');
+    pacote.classList.add('chacoalhando');
+    pacote.disabled = true;
+    titulo.textContent = T.pacote_embaralhando;
+    dica.hidden = true;
     reanimar(sec);
-    mostrar('calculando');
-    const passo = reduzido ? 500 : 850;
-    const troca = setInterval(() => {
-      k++;
-      if (k < frases.length) { frase.textContent = frases[k]; return; }
-      clearInterval(troca);
-      resultado(c);
-    }, passo);
+    mostrar('pacote');
+
+    const abrir = () => {
+      if (aberto) return;
+      aberto = true;
+      clearTimeout(timer);
+      pacote.disabled = true;
+      dica.hidden = true;
+      pacote.classList.add('aberto');
+      som('rasgar');
+      timer = setTimeout(() => resultado(c), tempo(1250));
+    };
+    pacote.onclick = abrir;
+    timer = setTimeout(() => {
+      pacote.classList.remove('chacoalhando');
+      pacote.disabled = false;
+      titulo.textContent = T.pacote_titulo;
+      dica.hidden = false;
+      pacote.focus({ preventScroll: true });
+      timer = setTimeout(abrir, 3500);
+    }, tempo(1500));
   }
 
   function resultado(c) {
@@ -264,9 +341,27 @@
     const pct = Quiz.porcentagens(c);
     document.body.dataset.perfil = top;
 
-    $('.cartao-jogador').textContent = nome ? `${T.cartao_de} ${nome}` : T.cartao_sem_nome;
-    $('.res-icone use').setAttribute('href', `#ic-${top}`);
-    $('.res-nome-txt').textContent = P.nome;
+    const area = $('.carta-3d');
+    const velha = $('.carta-perfil', area);
+    if (velha) velha.remove();
+    const carta = criarCarta(top);
+    carta.classList.add('face-frente');
+    carta.setAttribute('aria-label', `${T.carta_label} ${P.nome}`);
+    $('.cp-jogador', carta).textContent = nome;
+    $('.cp-sigla', carta).textContent = SIGLA[top];
+    $('.cp-stats', carta).replaceChildren(...rank.map(p => {
+      const li = document.createElement('li');
+      li.dataset.perfil = p;
+      if (p === top) li.className = 'topo';
+      const b = document.createElement('b');
+      b.textContent = pct[p];
+      li.append(b, SIGLA[p]);
+      return li;
+    }));
+    area.prepend(carta);
+    contarAte($('.cp-num', carta), pct[top]);
+
+    $('.res-nome').textContent = P.nome;
     $('.res-frase').textContent = P.frase;
     $('.res-descricao').textContent = P.descricao;
     lista('.res-fortes', P.pontosFortes);
@@ -278,28 +373,22 @@
     $('.bloco-lado-b').hidden = !temLadoB;
     if (temLadoB) $('.res-lado-b').textContent = D.perfis[seg].ladoB;
 
-    $('.mix-lista').replaceChildren(...rank.map((p, k) => {
-      const li = document.createElement('li');
-      li.dataset.perfil = p;
-      li.style.setProperty('--pct', `${pct[p]}%`);
-      li.style.setProperty('--i', k);
-      const rotulo = document.createElement('span');
-      rotulo.className = 'mix-nome';
-      rotulo.textContent = D.perfis[p].nome;
-      const barra = document.createElement('span');
-      barra.className = 'mix-barra';
-      barra.append(document.createElement('i'));
-      const valor = document.createElement('span');
-      valor.className = 'mix-valor';
-      valor.textContent = `${pct[p]}%`;
-      li.append(rotulo, barra, valor);
-      return li;
-    }));
-
     reanimar($('#resultado'));
     mostrar('resultado');
     $('.res-nome').focus({ preventScroll: true });
-    setTimeout(() => som('coroa'), reduzido ? 0 : 900);
+    setTimeout(() => som('revelar'), tempo(1150));
+  }
+
+  function contarAte(el, alvo) {
+    if (reduzido) { el.textContent = alvo; return; }
+    const inicio = performance.now() + 900;
+    const passo = agora => {
+      const k = Math.min(1, Math.max(0, (agora - inicio) / 900));
+      el.textContent = Math.round(alvo * (1 - Math.pow(1 - k, 3)));
+      if (k < 1) requestAnimationFrame(passo);
+    };
+    el.textContent = '0';
+    requestAnimationFrame(passo);
   }
 
   function lista(sel, itens) {
@@ -309,6 +398,23 @@
       return li;
     }));
   }
+
+  // carta inclina acompanhando o mouse
+  const areaCarta = $('.res-carta-area');
+  areaCarta.addEventListener('pointermove', e => {
+    if (reduzido || e.pointerType !== 'mouse') return;
+    const r = areaCarta.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    const c3 = $('.carta-3d');
+    c3.style.setProperty('--ry', `${(x * 18).toFixed(2)}deg`);
+    c3.style.setProperty('--rx', `${(-y * 14).toFixed(2)}deg`);
+  });
+  areaCarta.addEventListener('pointerleave', () => {
+    const c3 = $('.carta-3d');
+    c3.style.removeProperty('--rx');
+    c3.style.removeProperty('--ry');
+  });
 
   function comecar() {
     passos = Quiz.roteiro(D);
@@ -321,6 +427,7 @@
   function reiniciar() {
     nome = '';
     $('#campo-nome').value = '';
+    $('.previa-nome').textContent = T.previa_vazio;
     delete document.body.dataset.perfil;
     reanimar($('#inicio'));
     mostrar('inicio');
@@ -345,14 +452,33 @@
     o.stop(t + dur);
   }
 
+  // ruído filtrado: som de papel (carta, pacote rasgando)
+  function papel(dur, freq, vol) {
+    const n = Math.floor(audio.sampleRate * dur);
+    const buf = audio.createBuffer(1, n, audio.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2);
+    const fonte = audio.createBufferSource();
+    const filtro = audio.createBiquadFilter();
+    const g = audio.createGain();
+    fonte.buffer = buf;
+    filtro.type = 'bandpass';
+    filtro.frequency.value = freq;
+    filtro.Q.value = 0.7;
+    g.gain.value = vol;
+    fonte.connect(filtro).connect(g).connect(audio.destination);
+    fonte.start();
+  }
+
   function som(tipo) {
     if (!somLigado) return;
     try {
       audio = audio || new (window.AudioContext || window.webkitAudioContext)();
-      if (tipo === 'clique') nota(660, 0, 0.09, 'triangle', 0.18);
-      if (tipo === 'coroa') {
-        nota(150, 0, 0.32, 'sine', 0.5, 45);
-        [523.25, 659.25, 783.99].forEach((f, k) => nota(f, 0.18 + k * 0.09, 0.4, 'triangle', 0.12));
+      if (tipo === 'carta') { papel(0.13, 2600, 0.7); nota(520, 0.02, 0.07, 'triangle', 0.06); }
+      if (tipo === 'rasgar') papel(0.5, 1500, 0.9);
+      if (tipo === 'revelar') {
+        nota(140, 0, 0.3, 'sine', 0.45, 50);
+        [523.25, 659.25, 783.99, 1046.5].forEach((f, k) => nota(f, 0.12 + k * 0.08, 0.45, 'triangle', 0.1));
       }
     } catch (e) { /* navegador sem Web Audio: joga sem som */ }
   }
@@ -369,9 +495,12 @@
     mostrar('nome');
     $('#campo-nome').focus({ preventScroll: true });
   });
+  $('#campo-nome').addEventListener('input', e => {
+    $('.previa-nome').textContent = e.target.value.trim() || T.previa_vazio;
+  });
   $('#form-nome').addEventListener('submit', e => {
     e.preventDefault();
-    nome = $('#campo-nome').value.trim().replace(/\s+/g, ' ').slice(0, 24);
+    nome = $('#campo-nome').value.trim().replace(/\s+/g, ' ').slice(0, 20);
     comecar();
   });
   $('#intro .intro-seguir').addEventListener('click', proximo);
@@ -392,8 +521,8 @@
     if (tela === 'pergunta' || tela === 'vs') {
       const mapa = { a: 0, b: 1, c: 2, d: 3, 1: 0, 2: 1, 3: 2, 4: 3, arrowleft: 0, arrowright: 1 };
       if (k in mapa && !travado) {
-        const botao = document.querySelectorAll(`#${tela} .opcao`)[mapa[k]];
-        if (botao) { e.preventDefault(); botao.click(); }
+        const carta = $$(`#${tela} .opcao`)[mapa[k]];
+        if (carta) { e.preventDefault(); carta.click(); }
       } else if (k === 'escape' || k === 'backspace') {
         e.preventDefault();
         voltar();

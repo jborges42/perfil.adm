@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Qual é o seu perfil ADM? · ADM Experience</title>
-  <meta name="description" content="Quiz do ADM Experience, do Técnico em Administração da EEB Eurico Pinz.">
+  <meta name="description" content="Jogo de cartas do ADM Experience, do Técnico em Administração da EEB Eurico Pinz.">
   <link rel="icon" href="assets/marca/curso-simbolo.webp">
   <link rel="stylesheet" href="assets/fontes/fontes.css">
   <link rel="stylesheet" href="estilo.css">
@@ -12,31 +12,41 @@
   <script src="jogo.js" defer></script>
 </head>
 <body data-tela="inicio">
+  <!-- ícones de interface: Phosphor Icons (MIT), peso bold -->
   <svg class="sprite" aria-hidden="true" focusable="false">
-    <!-- ícones de interface (traço) -->
-    <symbol id="i-voltar" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
-    <symbol id="i-som" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5zM15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
-    <symbol id="i-mudo" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4V5zM22 9l-6 6M16 9l6 6"/></symbol>
-    <symbol id="i-imprimir" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></symbol>
-    <symbol id="i-reiniciar" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 3v5h5"/></symbol>
-    <symbol id="i-seta" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
-    <!-- ícones dos perfis (provisórios) -->
-    <symbol id="ic-criativo" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5M9 18h6M10 22h4"/></symbol>
-    <symbol id="ic-estrategista" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
-    <symbol id="ic-conector" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/><circle cx="9" cy="7" r="4"/></symbol>
-    <symbol id="ic-executor" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="i-voltar" viewBox="0 0 256 256"><path d="M228,128a12,12,0,0,1-12,12H69l51.52,51.51a12,12,0,0,1-17,17l-72-72a12,12,0,0,1,0-17l72-72a12,12,0,0,1,17,17L69,116H216A12,12,0,0,1,228,128Z"/></symbol>
+    <symbol id="i-seta" viewBox="0 0 256 256"><path d="M224.49,136.49l-72,72a12,12,0,0,1-17-17L187,140H40a12,12,0,0,1,0-24H187L135.51,64.48a12,12,0,0,1,17-17l72,72A12,12,0,0,1,224.49,136.49Z"/></symbol>
+    <symbol id="i-imprimir" viewBox="0 0 256 256"><path d="M214.67,68H204V40a12,12,0,0,0-12-12H64A12,12,0,0,0,52,40V68H41.33C25.16,68,12,80.56,12,96v80a12,12,0,0,0,12,12H52v28a12,12,0,0,0,12,12H192a12,12,0,0,0,12-12V188h28a12,12,0,0,0,12-12V96C244,80.56,230.84,68,214.67,68ZM76,52H180V68H76ZM180,204H76V172H180Zm40-40H204v-4a12,12,0,0,0-12-12H64a12,12,0,0,0-12,12v4H36V96c0-2.17,2.44-4,5.33-4H214.67c2.89,0,5.33,1.83,5.33,4Zm-16-44a16,16,0,1,1-16-16A16,16,0,0,1,204,120Z"/></symbol>
+    <symbol id="i-som" viewBox="0 0 256 256"><path d="M157.27,21.22a12,12,0,0,0-12.64,1.31L75.88,76H32A20,20,0,0,0,12,96v64a20,20,0,0,0,20,20H75.88l68.75,53.47A12,12,0,0,0,164,224V32A12,12,0,0,0,157.27,21.22ZM36,100H68v56H36Zm104,99.46L92,162.13V93.87l48-37.33ZM212,128a44,44,0,0,1-11,29.11,12,12,0,1,1-18-15.88,20,20,0,0,0,0-26.43,12,12,0,0,1,18-15.86A43.94,43.94,0,0,1,212,128Zm40,0a83.87,83.87,0,0,1-21.39,56,12,12,0,0,1-17.89-16,60,60,0,0,0,0-80,12,12,0,1,1,17.88-16A83.87,83.87,0,0,1,252,128Z"/></symbol>
+    <symbol id="i-mudo" viewBox="0 0 256 256"><path d="M56.88,31.93A12,12,0,1,0,39.12,48.07L64.51,76H32A20,20,0,0,0,12,96v64a20,20,0,0,0,20,20H75.88l68.75,53.47A12,12,0,0,0,164,224V185.44l35.12,38.63a12,12,0,0,0,17.76-16.14ZM36,100H68v56H36Zm104,99.46L92,162.13V106.24L140,159Zm-31-134a12,12,0,0,1,2.11-16.84l33.51-26.07A12,12,0,0,1,164,32V94.94a12,12,0,0,1-24,0V56.54l-14.15,11A12,12,0,0,1,109,65.44Zm74,49.35a12,12,0,0,1,18-15.85,44,44,0,0,1,5.55,50.21,12,12,0,0,1-21-11.55A19.67,19.67,0,0,0,188,128,20,20,0,0,0,183,114.79ZM252,128a84.18,84.18,0,0,1-19.11,53.35,12,12,0,1,1-18.53-15.25A60,60,0,0,0,212.73,88a12,12,0,1,1,17.88-16A83.87,83.87,0,0,1,252,128Z"/></symbol>
+    <symbol id="i-reiniciar" viewBox="0 0 256 256"><path d="M228,128a100,100,0,0,1-98.66,100H128a99.39,99.39,0,0,1-68.62-27.29,12,12,0,0,1,16.48-17.45,76,76,0,1,0-1.57-109c-.13.13-.25.25-.39.37L54.89,92H72a12,12,0,0,1,0,24H24a12,12,0,0,1-12-12V56a12,12,0,0,1,24,0V76.72L57.48,57.06A100,100,0,0,1,228,128Z"/></symbol>
   </svg>
+
+  <!-- pinceladas de fundo da mesa -->
+  <div class="mesa-fundo" aria-hidden="true"><span class="pincel-fundo p1"></span><span class="pincel-fundo p2"></span></div>
+
+  <!-- modelo da carta de perfil (tela inicial e resultado) -->
+  <template id="tpl-carta">
+    <article class="carta carta-perfil">
+      <div class="cp-topo">
+        <span class="cp-nota"><b class="cp-num"></b><span class="cp-sigla"></span></span>
+        <img class="cp-emblema" alt="">
+      </div>
+      <div class="cp-arte"><img class="cp-avatar" alt=""></div>
+      <p class="cp-placa"><span class="cp-perfil"></span></p>
+      <p class="cp-jogador"></p>
+      <ul class="cp-stats"></ul>
+      <p class="cp-rodape">ADM Experience · EEB Eurico Pinz</p>
+    </article>
+  </template>
 
   <header class="barra">
     <img class="barra-logo" src="assets/marca/adm-experience-adesivo.webp" alt="ADM Experience" width="1331" height="533">
-    <div class="progresso" role="progressbar" aria-valuemin="0" aria-valuemax="16" aria-valuenow="1" data-t-label="progresso_label">
-      <div class="progresso-trilho">
-        <span class="progresso-fill"></span>
-        <img class="progresso-coroa" src="assets/marca/coroa.png" alt="" width="222" height="154">
+    <div class="barra-direita">
+      <div class="monte" role="progressbar" aria-valuemin="0" aria-valuemax="16" aria-valuenow="0" data-t-label="progresso_label">
+        <span class="monte-pilha" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="monte-texto"><b class="monte-n">0</b><span class="monte-total">/16</span></span>
       </div>
-      <span class="progresso-texto"></span>
-    </div>
-    <div class="barra-acoes">
       <button class="icone-botao" id="btn-voltar" type="button" data-t-label="back_button" hidden><svg><use href="#i-voltar"/></svg></button>
       <button class="icone-botao" id="btn-som" type="button" data-t-label="som_label" aria-pressed="true"><svg class="som-on"><use href="#i-som"/></svg><svg class="som-off"><use href="#i-mudo"/></svg></button>
     </div>
@@ -45,14 +55,14 @@
   <main class="palco">
     <!-- 1. início -->
     <section class="tela" id="inicio">
-      <div class="inicio-heroi">
-        <img class="inicio-logo entra" src="assets/marca/adm-experience.webp" alt="ADM Experience" width="1305" height="533">
+      <div class="inicio-texto">
+        <img class="inicio-logo entra" src="assets/marca/adm-experience-adesivo.webp" alt="ADM Experience" width="1331" height="533">
         <p class="kicker entra" data-t="start_kicker"></p>
-        <h1 class="inicio-titulo entra">Qual é o seu <span class="marca-texto">perfil ADM?</span></h1>
+        <h1 class="inicio-titulo entra">Qual é o seu <span class="sublinhado">perfil ADM?</span></h1>
         <p class="inicio-sub entra" data-t="start_subtitle"></p>
         <button class="botao botao-grande entra" id="btn-comecar" type="button"><span data-t="start_button"></span><svg><use href="#i-seta"/></svg></button>
-        <ul class="inicio-perfis entra" data-t-label="perfis_label"></ul>
       </div>
+      <div class="leque" aria-hidden="true"></div>
       <footer class="rodape">
         <span class="rodape-rotulo" data-t="realizacao"></span>
         <img src="assets/marca/curso.webp" alt="Técnico em Administração" width="1458" height="845">
@@ -62,117 +72,110 @@
 
     <!-- 2. nome -->
     <section class="tela" id="nome">
-      <form class="cartaz entra" id="form-nome">
-        <h2 data-t="nome_title"></h2>
+      <form class="nome-form entra" id="form-nome">
+        <h2 class="titulo-tela" data-t="nome_title"></h2>
         <p data-t="nome_subtitle"></p>
         <label for="campo-nome" data-t="name_label"></label>
-        <input id="campo-nome" name="nome" type="text" maxlength="24" autocomplete="off" autocapitalize="words" spellcheck="false">
+        <input id="campo-nome" name="nome" type="text" maxlength="20" autocomplete="off" autocapitalize="words" spellcheck="false">
         <button class="botao" type="submit"><span data-t="begin_button"></span><svg><use href="#i-seta"/></svg></button>
       </form>
+      <div class="carta carta-previa entra" aria-hidden="true">
+        <p class="previa-rotulo" data-t="previa_rotulo"></p>
+        <p class="previa-nome"></p>
+        <p class="previa-perfil">? ? ?</p>
+      </div>
     </section>
 
-    <!-- 3. abertura de capítulo / rodada relâmpago -->
+    <!-- 3. abertura de fase / rodada relâmpago -->
     <section class="tela" id="intro">
-      <div class="intro-faixa">
+      <div class="carta intro-carta">
         <img class="intro-faiscas" src="assets/marca/faiscas.png" alt="" width="145" height="172">
-        <p class="intro-rotulo entra"></p>
-        <h2 class="intro-titulo entra"></h2>
-        <p class="intro-texto entra"></p>
-        <button class="botao intro-seguir entra" type="button"><span data-t="continuar"></span><svg><use href="#i-seta"/></svg></button>
+        <p class="intro-rotulo"></p>
+        <h2 class="intro-titulo"></h2>
+        <p class="intro-texto"></p>
+        <button class="botao intro-seguir" type="button"><span data-t="continuar"></span><svg><use href="#i-seta"/></svg></button>
         <span class="intro-tempo" aria-hidden="true"></span>
       </div>
     </section>
 
-    <!-- 4. pergunta-cenário (também usada no desempate) -->
+    <!-- 4. pergunta: a mão de cartas (também usada no desempate) -->
     <section class="tela" id="pergunta">
       <div class="pergunta-cabeca">
-        <span class="etiqueta entra"></span>
-        <h2 class="enunciado entra" tabindex="-1"></h2>
-        <p class="intro-desempate entra" data-t="tie_intro" hidden></p>
+        <span class="etiqueta"></span>
+        <h2 class="enunciado" tabindex="-1"></h2>
+        <p class="intro-desempate" data-t="tie_intro" hidden></p>
       </div>
-      <div class="opcoes" role="group"></div>
+      <div class="mao" role="group"></div>
     </section>
 
-    <!-- 5. isto ou aquilo -->
+    <!-- 5. rodada relâmpago: duelo de duas cartas -->
     <section class="tela" id="vs">
       <div class="pergunta-cabeca">
-        <span class="etiqueta etiqueta-raio entra"></span>
-        <h2 class="enunciado entra" tabindex="-1"></h2>
+        <span class="etiqueta etiqueta-raio"></span>
+        <h2 class="enunciado" tabindex="-1"></h2>
       </div>
-      <div class="opcoes opcoes-vs" role="group"></div>
+      <div class="duelo" role="group"></div>
+      <span class="pavio" aria-hidden="true"></span>
     </section>
 
-    <!-- 6. calculando -->
-    <section class="tela" id="calculando">
-      <img class="calc-coroa" src="assets/marca/coroa.png" alt="" width="222" height="154">
-      <h2 class="calc-titulo" data-t="loading_title"></h2>
-      <div class="calc-pincel" aria-hidden="true"><span></span></div>
-      <p class="calculando-frase" aria-live="polite"></p>
+    <!-- 6. pacote -->
+    <section class="tela" id="pacote">
+      <h2 class="titulo-tela pacote-titulo" data-t="pacote_titulo"></h2>
+      <button class="pacote" type="button" data-t-label="pacote_abrir">
+        <span class="pacote-carta" aria-hidden="true"></span>
+        <span class="pacote-corpo" aria-hidden="true">
+          <img src="assets/marca/adm-experience-adesivo.webp" alt="" width="1331" height="533">
+          <span class="pacote-selo" data-t="pacote_selo"></span>
+        </span>
+        <span class="pacote-topo" aria-hidden="true"></span>
+      </button>
+      <p class="pacote-dica" data-t="pacote_dica"></p>
     </section>
 
     <!-- 7. resultado -->
     <section class="tela" id="resultado">
-      <article class="cartao">
-        <div class="res-heroi">
-          <div class="cartao-cabeca">
-            <img class="cartao-logo" src="assets/marca/adm-experience-adesivo.webp" alt="ADM Experience" width="1331" height="533">
-            <p class="cartao-jogador"></p>
-          </div>
-          <p class="kicker" data-t="result_kicker"></p>
-          <h1 class="res-nome" tabindex="-1">
-            <img class="res-coroa" src="assets/marca/coroa.png" alt="" width="222" height="154">
-            <span class="res-nome-txt"></span>
-          </h1>
-          <p class="res-frase"></p>
-          <svg class="res-icone" aria-hidden="true"><use href="#ic-criativo"/></svg>
+      <div class="res-carta-area">
+        <div class="carta-3d">
+          <div class="carta carta-verso face-verso" aria-hidden="true"></div>
         </div>
-
-        <div class="res-corpo">
-          <p class="res-descricao"></p>
-          <section class="bloco bloco-mix">
-            <h3 data-t="mix_title"></h3>
-            <ol class="mix-lista"></ol>
-          </section>
-          <div class="res-grade">
-            <section class="bloco">
-              <h3 data-t="pontos_fortes_title"></h3>
-              <ul class="chips res-fortes"></ul>
-            </section>
-            <section class="bloco">
-              <h3 data-t="combina_title"></h3>
-              <ul class="chips chips-cor res-combina"></ul>
-            </section>
-            <section class="bloco">
-              <h3 data-t="profissoes_title"></h3>
-              <ul class="lista res-profissoes"></ul>
-            </section>
-            <section class="bloco">
-              <h3 data-t="no_tecnico_title"></h3>
-              <p class="res-tecnico"></p>
-            </section>
-            <section class="bloco bloco-lado-b">
-              <h3 data-t="lado_b_title"></h3>
-              <p class="res-lado-b"></p>
-            </section>
-            <section class="bloco">
-              <h3 data-t="dica_title"></h3>
-              <p class="res-dica"></p>
-            </section>
-          </div>
-          <p class="cta" data-t="cta"></p>
-          <p class="aviso" data-t="aviso"></p>
-          <footer class="cartao-rodape">
-            <img src="assets/marca/curso.webp" alt="Técnico em Administração" width="1458" height="845">
-            <img src="assets/marca/escola.webp" alt="EEB Eurico Pinz" width="740" height="759">
-            <span data-t="credits"></span>
-          </footer>
-        </div>
-      </article>
-
-      <div class="acoes">
-        <button class="botao botao-secundario" id="btn-imprimir" type="button"><svg><use href="#i-imprimir"/></svg><span data-t="print_button"></span></button>
-        <button class="botao" id="btn-reiniciar" type="button"><svg><use href="#i-reiniciar"/></svg><span data-t="restart_button"></span></button>
+        <img class="res-coroa" src="assets/marca/coroa.png" alt="" width="222" height="154">
       </div>
+      <div class="res-info">
+        <p class="kicker" data-t="result_kicker"></p>
+        <h1 class="res-nome" tabindex="-1"></h1>
+        <p class="res-frase"></p>
+        <p class="res-descricao"></p>
+        <div class="res-mini">
+          <section class="mini">
+            <h3 data-t="pontos_fortes_title"></h3>
+            <ul class="res-fortes"></ul>
+          </section>
+          <section class="mini">
+            <h3 data-t="combina_title"></h3>
+            <ul class="res-combina"></ul>
+          </section>
+          <section class="mini">
+            <h3 data-t="profissoes_title"></h3>
+            <ul class="res-profissoes"></ul>
+          </section>
+        </div>
+        <dl class="res-extra">
+          <div class="bloco-lado-b"><dt data-t="lado_b_title"></dt><dd class="res-lado-b"></dd></div>
+          <div><dt data-t="no_tecnico_title"></dt><dd class="res-tecnico"></dd></div>
+          <div><dt data-t="dica_title"></dt><dd class="res-dica"></dd></div>
+        </dl>
+        <p class="cta" data-t="cta"></p>
+        <p class="aviso" data-t="aviso"></p>
+        <div class="acoes">
+          <button class="botao botao-claro" id="btn-imprimir" type="button"><svg><use href="#i-imprimir"/></svg><span data-t="print_button"></span></button>
+          <button class="botao" id="btn-reiniciar" type="button"><svg><use href="#i-reiniciar"/></svg><span data-t="restart_button"></span></button>
+        </div>
+      </div>
+      <footer class="res-rodape">
+        <img src="assets/marca/curso.webp" alt="Técnico em Administração" width="1458" height="845">
+        <img src="assets/marca/escola.webp" alt="EEB Eurico Pinz" width="740" height="759">
+        <span data-t="credits"></span>
+      </footer>
     </section>
   </main>
 </body>
