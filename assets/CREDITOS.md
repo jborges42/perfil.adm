@@ -23,3 +23,10 @@ O que a licença MIT pede: manter o aviso de copyright e o texto da licença jun
 ## Fontes
 
 Ver `fontes/LICENCAS.txt`.
+
+## Avatares e emblemas
+
+- Arquivos: `avatares/criativo.svg`, `avatares/estrategista.svg`, `avatares/conector.svg`, `avatares/executor.svg`, `emblemas/criativo.svg`, `emblemas/estrategista.svg`, `emblemas/conector.svg`, `emblemas/executor.svg` e `emblemas/verso.svg` (verso da carta).
+- Autoria: desenhados para este projeto, com a geometria escrita à mão. Não usam material de terceiros: nenhum path do Phosphor, nenhuma fonte, imagem ou recorte embutido.
+- Referências de estilo, sem cópia de desenho: o cartoon "rubber hose" dos anos 1930 (luvas, braços de mangueira, olhos pie-cut). As faíscas amarelas seguem a forma das faíscas da marca ADM Experience e foram redesenhadas, sem traçar o PNG. O naipe hexagonal do Estrategista lembra o símbolo do curso de Administração; só a forma, não o desenho.
+- A coroa da tela de resultado é a da própria marca (`marca/coroa.png`), aplicada pelo HTML. Ela não está dentro dos SVGs.
